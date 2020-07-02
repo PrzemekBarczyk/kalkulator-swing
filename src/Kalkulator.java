@@ -2,6 +2,6 @@ public class Kalkulator {
 
     public static void main(String[] args) {
 
-        System.out.println("Hello world!");
+        new KalkulatorKontroler(new KalkulatorWidok(), new KalkulatorModel());
     }
 }
