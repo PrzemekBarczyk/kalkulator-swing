@@ -8,12 +8,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class KalkulatorWidok {
+public class CalculatorView {
 
     private int WINDOW_WIDTH = 400;
     private JFrame frame;
 
-    public KalkulatorWidok() {
+    public CalculatorView() {
 
         frame = new JFrame();
         frame.setTitle("Kalkulator");
