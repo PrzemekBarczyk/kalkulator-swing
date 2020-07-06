@@ -21,63 +21,63 @@ public class CalculatorController implements ActionListener, KeyListener {
         Object source = e.getSource();
 
         if (source == theView.getZero()) {
-            theModel.addNumberToResultLabel("0");
+            theModel.handleNumbers("0");
         }
         else if (source == theView.getOne()) {
-            theModel.addNumberToResultLabel("1");
+            theModel.handleNumbers("1");
         }
         else if (source == theView.getTwo()) {
-            theModel.addNumberToResultLabel("2");
+            theModel.handleNumbers("2");
         }
         else if (source == theView.getThree()) {
-            theModel.addNumberToResultLabel("3");
+            theModel.handleNumbers("3");
         }
         else if(source == theView.getFour()) {
-            theModel.addNumberToResultLabel("4");
+            theModel.handleNumbers("4");
         }
         else if (source == theView.getFive()) {
-            theModel.addNumberToResultLabel("5");
+            theModel.handleNumbers("5");
         }
         else if (source == theView.getSix()) {
-            theModel.addNumberToResultLabel("6");
+            theModel.handleNumbers("6");
         }
         else if (source == theView.getSeven()) {
-            theModel.addNumberToResultLabel("7");
+            theModel.handleNumbers("7");
         }
         else if (source == theView.getEight()) {
-            theModel.addNumberToResultLabel("8");
+            theModel.handleNumbers("8");
         }
         else if (source == theView.getNine()) {
-            theModel.addNumberToResultLabel("9");
+            theModel.handleNumbers("9");
         }
 
         else if (source == theView.getPlus()) {
-            theModel.addSignToOperationLabel("+");
+            theModel.handleOperationsSigns("+");
         }
         else if (source == theView.getMinus()) {
-            theModel.addSignToOperationLabel("-");
+            theModel.handleOperationsSigns("-");
         }
         else if (source == theView.getMultiplicationSign()) {
-            theModel.addSignToOperationLabel("*");
+            theModel.handleOperationsSigns("*");
         }
         else if (source == theView.getDivisionSign()) {
-            theModel.addSignToOperationLabel("/");
+            theModel.handleOperationsSigns("/");
         }
         else if (source == theView.getSecondPower()) {
-            theModel.addSignToOperationLabel("pow");
+            theModel.handleOperationsSigns("pow");
         }
         else if (source == theView.getSquareRoot()) {
-            theModel.addSignToOperationLabel("sqrt");
+            theModel.handleOperationsSigns("sqrt");
         }
 
         else if (source == theView.getEqualSign()) {
-            theModel.calculateResult();
+            theModel.handleEqualSign();
         }
         else if (source == theView.getDot()) {
-            theModel.addNumberToResultLabel(".");
+            theModel.handleNumbers(".");
         }
         else if (source == theView.getBackspace()) {
-            theModel.removeOneNumber();
+            theModel.removeLastNumber();
         }
         else if (source == theView.getClear()) {
             theModel.removeAllNumbers();
