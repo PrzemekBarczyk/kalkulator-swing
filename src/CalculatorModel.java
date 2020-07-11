@@ -33,6 +33,10 @@ public class CalculatorModel {
      */
     public void handleNumbers(String number) {
 
+        if (resultLabelText.equals("Cannot divide by zero")) { // czyszczenie po dzieleniu przez zero
+            removeAllNumbers();
+        }
+
         if (choseOperationSign && choseEqualSign && !choseNumber) { // wyświetlono wynik [2+3=]||[2+3-4=]
             resultLabelText = "0";
             operationLabelText = "";
@@ -57,6 +61,10 @@ public class CalculatorModel {
      */
     public void handleOperationsSigns(String sign) {
 
+        if (resultLabelText.equals("Cannot divide by zero")) { // zablokowanie operacji po dzieleniu przez zero
+            return;
+        }
+
         if (choseOperationSign && !choseNumber && !choseEqualSign) { // wybrano kolejny znak pod rząd [2+][2+3-] -> nadpisuje poprzedni znak nowym
             swapSignNumber(sign);
             operationSign = sign;
@@ -74,8 +82,12 @@ public class CalculatorModel {
         }
 
         // wspólne dla wszystkich przypadków
+        if (resultLabelText.equals("Cannot divide by zero")) { // sprawdzenie czy nie doszło do dzielenia przez 0
+            return;
+        }
         firstNumber = convertToDouble(resultLabelText);
         operationSign = sign;
+        resultLabelText = convertToString(convertToDouble(resultLabelText));
 
         choseNumber = false;
         choseDot = false;
@@ -87,6 +99,11 @@ public class CalculatorModel {
      * Obsługuje zdarzenie wywołane wyborem znaku =.
      */
     public void handleEqualSign() {
+
+        if (resultLabelText.equals("Cannot divide by zero")) { // zabezpieczenie po dzieleniu przez zero
+            removeAllNumbers();
+            return;
+        }
 
         if (!choseOperationSign) { // wybrano = i nie wybrano żadnego znaku []||[=]||[2]||[2=]
             operationLabelText = resultLabelText + "=";
@@ -180,7 +197,12 @@ public class CalculatorModel {
     }
 
     private void divide() {
-        resultLabelText = convertToString(firstNumber / secondNumber);
+        if (secondNumber != 0) { // zabezpieczenie przed dzieleniem przez 0
+            resultLabelText = convertToString(firstNumber / secondNumber);
+        }
+        else {
+            resultLabelText = "Cannot divide by zero";
+        }
     }
 
 //    private void secondPower() {
