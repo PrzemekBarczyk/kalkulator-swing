@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.KeyListener;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -156,28 +157,47 @@ public class CalculatorView {
         keyPanel.add(equalSign);
     }
 
-    public void addListeners(ActionListener keyListener) {
+    public void addListeners(ActionListener actionListener, KeyListener keyListener) {
 
-        zero.addActionListener(keyListener);
-        one.addActionListener(keyListener);
-        two.addActionListener(keyListener);
-        three.addActionListener(keyListener);
-        four.addActionListener(keyListener);
-        five.addActionListener(keyListener);
-        six.addActionListener(keyListener);
-        seven.addActionListener(keyListener);
-        eight.addActionListener(keyListener);
-        nine.addActionListener(keyListener);
-        plus.addActionListener(keyListener);
-        minus.addActionListener(keyListener);
-        multiplicationSign.addActionListener(keyListener);
-        divisionSign.addActionListener(keyListener);
-        secondPower.addActionListener(keyListener);
-        squareRoot.addActionListener(keyListener);
-        equalSign.addActionListener(keyListener);
-        dot.addActionListener(keyListener);
-        backspace.addActionListener(keyListener);
-        clear.addActionListener(keyListener);
+        zero.addActionListener(actionListener);
+        one.addActionListener(actionListener);
+        two.addActionListener(actionListener);
+        three.addActionListener(actionListener);
+        four.addActionListener(actionListener);
+        five.addActionListener(actionListener);
+        six.addActionListener(actionListener);
+        seven.addActionListener(actionListener);
+        eight.addActionListener(actionListener);
+        nine.addActionListener(actionListener);
+        plus.addActionListener(actionListener);
+        minus.addActionListener(actionListener);
+        multiplicationSign.addActionListener(actionListener);
+        divisionSign.addActionListener(actionListener);
+        secondPower.addActionListener(actionListener);
+        squareRoot.addActionListener(actionListener);
+        equalSign.addActionListener(actionListener);
+        dot.addActionListener(actionListener);
+        backspace.addActionListener(actionListener);
+        clear.addActionListener(actionListener);
+
+        zero.addKeyListener(keyListener);
+        one.addKeyListener(keyListener);
+        two.addKeyListener(keyListener);
+        three.addKeyListener(keyListener);
+        four.addKeyListener(keyListener);
+        five.addKeyListener(keyListener);
+        six.addKeyListener(keyListener);
+        seven.addKeyListener(keyListener);
+        eight.addKeyListener(keyListener);
+        nine.addKeyListener(keyListener);
+        plus.addKeyListener(keyListener);
+        minus.addKeyListener(keyListener);
+        multiplicationSign.addKeyListener(keyListener);
+        divisionSign.addKeyListener(keyListener);
+        equalSign.addKeyListener(keyListener);
+        dot.addKeyListener(keyListener);
+        backspace.addKeyListener(keyListener);
+        clear.addKeyListener(keyListener);
     }
 
     public void setOperationLabelText(String text) {
