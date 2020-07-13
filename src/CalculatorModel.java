@@ -142,10 +142,10 @@ public class CalculatorModel {
             case "-":
                 subtract();
                 break;
-            case "*":
+            case "×":
                 multiply();
                 break;
-            case "/":
+            case "÷":
                 divide();
                 break;
         }

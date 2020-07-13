@@ -58,10 +58,10 @@ public class CalculatorController implements ActionListener, KeyListener {
             theModel.handleOperationsSigns("-");
         }
         else if (source == theView.getMultiplicationSign()) {
-            theModel.handleOperationsSigns("*");
+            theModel.handleOperationsSigns("×");
         }
         else if (source == theView.getDivisionSign()) {
-            theModel.handleOperationsSigns("/");
+            theModel.handleOperationsSigns("÷");
         }
         else if (source == theView.getSecondPower()) {
             theModel.handleOperationsSigns("pow");
@@ -135,10 +135,10 @@ public class CalculatorController implements ActionListener, KeyListener {
             theModel.handleOperationsSigns("-");
         }
         else if (key == KeyEvent.VK_MULTIPLY || (e.isShiftDown() && key == KeyEvent.VK_8)) {
-            theModel.handleOperationsSigns("*");
+            theModel.handleOperationsSigns("×");
         }
         else if (key == KeyEvent.VK_DIVIDE) {
-            theModel.handleOperationsSigns("/");
+            theModel.handleOperationsSigns("÷");
         }
 
         else if ((key == KeyEvent.VK_EQUALS && !e.isShiftDown()) || key == KeyEvent.VK_ENTER) {

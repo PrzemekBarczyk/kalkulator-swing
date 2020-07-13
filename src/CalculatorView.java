@@ -100,10 +100,10 @@ public class CalculatorView {
         nine = new JButton("9");
         plus = new JButton("+");
         minus = new JButton("-");
-        multiplicationSign = new JButton("x");
-        divisionSign = new JButton("/");
-        secondPower = new JButton("pow");
-        squareRoot = new JButton("sqrt");
+        multiplicationSign = new JButton("×");
+        divisionSign = new JButton("÷");
+        secondPower = new JButton("x²");
+        squareRoot = new JButton("√x");
         equalSign = new JButton("=");
         dot = new JButton(".");
         backspace = new JButton("backspace");
@@ -113,7 +113,8 @@ public class CalculatorView {
     private void setButtonsFonts() {
 
         Font numbersFont = new Font("Arial", Font.BOLD, 20);
-        Font signFont = new Font("Arial", Font.PLAIN, 30);
+        Font signFont = new Font("Times New Roman", Font.BOLD, 35);
+        Font remainSignFont = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 21);
 
         zero.setFont(numbersFont);
         one.setFont(numbersFont);
@@ -129,6 +130,8 @@ public class CalculatorView {
         minus.setFont(signFont);
         multiplicationSign.setFont(signFont);
         divisionSign.setFont(signFont);
+        secondPower.setFont(remainSignFont);
+        squareRoot.setFont(remainSignFont);
         equalSign.setFont(signFont);
         dot.setFont(signFont);
     }
