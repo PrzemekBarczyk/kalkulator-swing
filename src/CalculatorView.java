@@ -1,10 +1,11 @@
-import java.awt.Component;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.KeyListener;
-import javax.swing.BoxLayout;
+import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -45,8 +46,9 @@ public class CalculatorView {
         frame.setTitle("Kalkulator");
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.PAGE_AXIS));
-        frame.setMinimumSize(new Dimension(WINDOW_WIDTH, 520)); // Ramka wyższa o 20p od Panelu
+        frame.getContentPane().setLayout(new BorderLayout());
+        frame.setMinimumSize(new Dimension(WINDOW_WIDTH+20, 540)); // Ramka większa o 40p od Panelu
+        frame.setPreferredSize(new Dimension(WINDOW_WIDTH+20, 540));
 
         addComponentsToPane();
 
@@ -55,35 +57,39 @@ public class CalculatorView {
 
     private void addComponentsToPane() {
 
+        Color backgroundColor = new Color(31,31,31);
+
         JPanel resultPanel = new JPanel();
-        resultPanel.setLayout(new BoxLayout(resultPanel, BoxLayout.PAGE_AXIS));
+        resultPanel.setLayout(new BorderLayout());
         resultPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, 100));
-        resultPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        resultPanel.setBackground(backgroundColor);
 
-        operationLabel = new JLabel("");
+        operationLabel = new JLabel("", SwingConstants.RIGHT);
         operationLabel.setPreferredSize(new Dimension(WINDOW_WIDTH, 30));
-        operationLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         operationLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        operationLabel.setForeground(Color.white);
 
-        resultLabel = new JLabel("0");
+        resultLabel = new JLabel("0", SwingConstants.RIGHT);
         resultLabel.setPreferredSize(new Dimension(WINDOW_WIDTH, 70));
-        resultLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         resultLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        resultLabel.setForeground(Color.white);
 
-        resultPanel.add(operationLabel);
-        resultPanel.add(resultLabel);
+        resultPanel.add(operationLabel, BorderLayout.NORTH);
+        resultPanel.add(resultLabel, BorderLayout.SOUTH);
 
         JPanel keyPanel = new JPanel();
         keyPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, 400));
         keyPanel.setLayout(new GridLayout(5, 4, 3, 3));
-        keyPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        keyPanel.setBackground(backgroundColor);
 
         createButtons();
         setButtonsFonts();
+        setButtonsForegroungs();
+        setButtonsBackgroungs();
         addButtonsToPanel(keyPanel);
 
-        frame.getContentPane().add(resultPanel);
-        frame.getContentPane().add(keyPanel);
+        frame.getContentPane().add(resultPanel, BorderLayout.NORTH);
+        frame.getContentPane().add(keyPanel, BorderLayout.CENTER);
     }
 
     private void createButtons() {
@@ -106,8 +112,60 @@ public class CalculatorView {
         squareRoot = new JButton("√x");
         equalSign = new JButton("=");
         dot = new JButton(".");
-        backspace = new JButton("backspace");
-        clear = new JButton("clear");
+        backspace = new JButton("⌫");
+        clear = new JButton("C");
+    }
+
+    private void setButtonsForegroungs() {
+
+        zero.setForeground(Color.white);
+        one.setForeground(Color.white);
+        two.setForeground(Color.white);
+        three.setForeground(Color.white);
+        four.setForeground(Color.white);
+        five.setForeground(Color.white);
+        six.setForeground(Color.white);
+        seven.setForeground(Color.white);
+        eight.setForeground(Color.white);
+        nine.setForeground(Color.white);
+        plus.setForeground(Color.white);
+        minus.setForeground(Color.white);
+        multiplicationSign.setForeground(Color.white);
+        divisionSign.setForeground(Color.white);
+        secondPower.setForeground(Color.white);
+        squareRoot.setForeground(Color.white);
+        equalSign.setForeground(Color.white);
+        dot.setForeground(Color.white);
+        backspace.setForeground(Color.white);
+        clear.setForeground(Color.white);
+    }
+
+    private void setButtonsBackgroungs() {
+
+        Color numbersColor = new Color(6,6,6);
+        Color operationsColor = new Color(19,19,19);
+        Color equalsColor = new Color(19,67,105);
+
+        zero.setBackground(numbersColor);
+        one.setBackground(numbersColor);
+        two.setBackground(numbersColor);
+        three.setBackground(numbersColor);
+        four.setBackground(numbersColor);
+        five.setBackground(numbersColor);
+        six.setBackground(numbersColor);
+        seven.setBackground(numbersColor);
+        eight.setBackground(numbersColor);
+        nine.setBackground(numbersColor);
+        plus.setBackground(operationsColor);
+        minus.setBackground(operationsColor);
+        multiplicationSign.setBackground(operationsColor);
+        divisionSign.setBackground(operationsColor);
+        secondPower.setBackground(operationsColor);
+        squareRoot.setBackground(operationsColor);
+        equalSign.setBackground(equalsColor);
+        dot.setBackground(numbersColor);
+        backspace.setBackground(operationsColor);
+        clear.setBackground(numbersColor);
     }
 
     private void setButtonsFonts() {
@@ -134,6 +192,8 @@ public class CalculatorView {
         squareRoot.setFont(remainSignFont);
         equalSign.setFont(signFont);
         dot.setFont(signFont);
+        backspace.setFont(new Font("Default", Font.BOLD, 20));
+        clear.setFont(numbersFont);
     }
 
     private void addButtonsToPanel(JPanel keyPanel) {
