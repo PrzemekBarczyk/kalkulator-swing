@@ -67,12 +67,12 @@ public class CalculatorView {
 
         operationLabel = new JLabel("", SwingConstants.RIGHT);
         operationLabel.setPreferredSize(new Dimension(WINDOW_WIDTH, 30));
-        operationLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        operationLabel.setForeground(Color.white);
+        operationLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        operationLabel.setForeground(Color.lightGray);
 
         resultLabel = new JLabel("0", SwingConstants.RIGHT);
         resultLabel.setPreferredSize(new Dimension(WINDOW_WIDTH, 70));
-        resultLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        resultLabel.setFont(new Font("Arial", Font.PLAIN, 50));
         resultLabel.setForeground(Color.white);
 
         resultPanel.add(operationLabel, BorderLayout.NORTH);

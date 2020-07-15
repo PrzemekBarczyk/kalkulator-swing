@@ -74,7 +74,7 @@ public class CalculatorModel {
             operationLabelText = "";
         }
 
-        operationLabelText = operationLabelText + convertToString(convertToDouble(resultLabelText)) + sign;
+        operationLabelText = operationLabelText + convertToString(convertToDouble(resultLabelText)) + " " + sign + " ";
 
         if (choseOperationSign && choseNumber && !choseEqualSign) { // wpisano liczbę, wybrano kolejny znak i nie wybrano = [2+3]->wyznacza wynik
             secondNumber = convertToDouble(resultLabelText);
@@ -106,7 +106,7 @@ public class CalculatorModel {
         }
 
         if (!choseOperationSign) { // wybrano = i nie wybrano żadnego znaku []||[=]||[2]||[2=]
-            operationLabelText = resultLabelText + "=";
+            operationLabelText = resultLabelText + " = ";
             choseNumber = false;
             choseDot = false;
             choseEqualSign = true;
@@ -116,15 +116,15 @@ public class CalculatorModel {
         // choseOperationSign == True zawsze w tym miejscu
         if (choseEqualSign) { // wybrano znak i = [2+=]||[2+3=]
             firstNumber = convertToDouble(resultLabelText);
-            operationLabelText = convertToString(convertToDouble(resultLabelText)) + operationSign + convertToString(secondNumber) + "=";
+            operationLabelText = convertToString(convertToDouble(resultLabelText)) + " " + operationSign + " " + convertToString(secondNumber) + " = ";
         }
         else if (!choseNumber) { // wybrano znak i nie wybrano liczby [+]||[2+]
             secondNumber = convertToDouble(resultLabelText);
-            operationLabelText = operationLabelText + convertToString(convertToDouble(resultLabelText)) + "=";
+            operationLabelText = operationLabelText + convertToString(convertToDouble(resultLabelText)) + " = ";
         }
         else { // wybrano znak i cyfre [2+3]
             secondNumber = convertToDouble(resultLabelText);
-            operationLabelText = operationLabelText + convertToString(secondNumber) + "=";
+            operationLabelText = operationLabelText + convertToString(secondNumber) + " = ";
         }
 
         executeOperation();
@@ -172,7 +172,7 @@ public class CalculatorModel {
 
     private void swapSignNumber(String sign) {
         if (operationLabelText.length() > 0) {
-            operationLabelText = operationLabelText.substring(0, operationLabelText.length()-1) + sign;
+            operationLabelText = operationLabelText.substring(0, operationLabelText.length()-2) + sign + " ";
         }
     }
 
