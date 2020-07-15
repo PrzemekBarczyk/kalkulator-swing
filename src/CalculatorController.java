@@ -1,9 +1,12 @@
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class CalculatorController implements ActionListener, KeyListener {
+public class CalculatorController implements ActionListener, KeyListener, MouseListener {
 
     private CalculatorView theView;
     private CalculatorModel theModel;
@@ -13,7 +16,7 @@ public class CalculatorController implements ActionListener, KeyListener {
         this.theView = theView;
         this.theModel = theModel;
 
-        theView.addListeners(this, this);
+        theView.addListeners(this, this, this);
     }
 
     @Override
@@ -156,5 +159,161 @@ public class CalculatorController implements ActionListener, KeyListener {
 
         theView.setOperationLabelText(theModel.getOperationLabelText());
         theView.setResultLabelText(theModel.getResultLabelText());
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        Object source = e.getSource();
+        Color selectButtonColor = new Color(70,70,70);
+
+        if (source == theView.getZero()) {
+            theView.getZero().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getOne()) {
+            theView.getOne().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getTwo()) {
+            theView.getTwo().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getThree()) {
+            theView.getThree().setBackground(selectButtonColor);
+        }
+        else if(source == theView.getFour()) {
+            theView.getFour().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getFive()) {
+            theView.getFive().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getSix()) {
+            theView.getSix().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getSeven()) {
+            theView.getSeven().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getEight()) {
+            theView.getEight().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getNine()) {
+            theView.getNine().setBackground(selectButtonColor);
+        }
+
+        else if (source == theView.getPlus()) {
+            theView.getPlus().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getMinus()) {
+            theView.getMinus().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getMultiplicationSign()) {
+            theView.getMultiplicationSign().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getDivisionSign()) {
+            theView.getDivisionSign().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getSecondPower()) {
+            theView.getSecondPower().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getSquareRoot()) {
+            theView.getSquareRoot().setBackground(selectButtonColor);
+        }
+
+        else if (source == theView.getEqualSign()) {
+            theView.getEqualSign().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getDot()) {
+            theView.getDot().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getBackspace()) {
+            theView.getBackspace().setBackground(selectButtonColor);
+        }
+        else if (source == theView.getClear()) {
+            theView.getClear().setBackground(selectButtonColor);
+        }
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+        Object source = e.getSource();
+        Color numbersColor = new Color(6,6,6);
+        Color operationsColor = new Color(19,19,19);
+        Color equalsColor = new Color(19,67,105);
+
+        if (source == theView.getZero()) {
+            theView.getZero().setBackground(numbersColor);
+        }
+        else if (source == theView.getOne()) {
+            theView.getOne().setBackground(numbersColor);
+        }
+        else if (source == theView.getTwo()) {
+            theView.getTwo().setBackground(numbersColor);
+        }
+        else if (source == theView.getThree()) {
+            theView.getThree().setBackground(numbersColor);
+        }
+        else if(source == theView.getFour()) {
+            theView.getFour().setBackground(numbersColor);
+        }
+        else if (source == theView.getFive()) {
+            theView.getFive().setBackground(numbersColor);
+        }
+        else if (source == theView.getSix()) {
+            theView.getSix().setBackground(numbersColor);
+        }
+        else if (source == theView.getSeven()) {
+            theView.getSeven().setBackground(numbersColor);
+        }
+        else if (source == theView.getEight()) {
+            theView.getEight().setBackground(numbersColor);
+        }
+        else if (source == theView.getNine()) {
+            theView.getNine().setBackground(numbersColor);
+        }
+
+        else if (source == theView.getPlus()) {
+            theView.getPlus().setBackground(operationsColor);
+        }
+        else if (source == theView.getMinus()) {
+            theView.getMinus().setBackground(operationsColor);
+        }
+        else if (source == theView.getMultiplicationSign()) {
+            theView.getMultiplicationSign().setBackground(operationsColor);
+        }
+        else if (source == theView.getDivisionSign()) {
+            theView.getDivisionSign().setBackground(operationsColor);
+        }
+        else if (source == theView.getSecondPower()) {
+            theView.getSecondPower().setBackground(operationsColor);
+        }
+        else if (source == theView.getSquareRoot()) {
+            theView.getSquareRoot().setBackground(operationsColor);
+        }
+
+        else if (source == theView.getEqualSign()) {
+            theView.getEqualSign().setBackground(equalsColor);
+        }
+        else if (source == theView.getDot()) {
+            theView.getDot().setBackground(numbersColor);
+        }
+        else if (source == theView.getBackspace()) {
+            theView.getBackspace().setBackground(operationsColor);
+        }
+        else if (source == theView.getClear()) {
+            theView.getClear().setBackground(numbersColor);
+        }
     }
 }

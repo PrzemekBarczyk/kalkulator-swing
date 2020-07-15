@@ -2,9 +2,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.KeyListener;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -86,6 +87,7 @@ public class CalculatorView {
         setButtonsFonts();
         setButtonsForegroungs();
         setButtonsBackgroungs();
+        setButtonsBorderPainted();
         addButtonsToPanel(keyPanel);
 
         frame.getContentPane().add(resultPanel, BorderLayout.NORTH);
@@ -196,6 +198,30 @@ public class CalculatorView {
         clear.setFont(numbersFont);
     }
 
+    private void setButtonsBorderPainted() {
+
+        zero.setBorderPainted(false);
+        one.setBorderPainted(false);
+        two.setBorderPainted(false);
+        three.setBorderPainted(false);
+        four.setBorderPainted(false);
+        five.setBorderPainted(false);
+        six.setBorderPainted(false);
+        seven.setBorderPainted(false);
+        eight.setBorderPainted(false);
+        nine.setBorderPainted(false);
+        plus.setBorderPainted(false);
+        minus.setBorderPainted(false);
+        multiplicationSign.setBorderPainted(false);
+        divisionSign.setBorderPainted(false);
+        secondPower.setBorderPainted(false);
+        squareRoot.setBorderPainted(false);
+        equalSign.setBorderPainted(false);
+        dot.setBorderPainted(false);
+        backspace.setBorderPainted(false);
+        clear.setBorderPainted(false);
+    }
+
     private void addButtonsToPanel(JPanel keyPanel) {
 
         keyPanel.add(backspace);
@@ -220,7 +246,7 @@ public class CalculatorView {
         keyPanel.add(equalSign);
     }
 
-    public void addListeners(ActionListener actionListener, KeyListener keyListener) {
+    public void addListeners(ActionListener actionListener, KeyListener keyListener, MouseListener mouseListener) {
 
         zero.addActionListener(actionListener);
         one.addActionListener(actionListener);
@@ -261,7 +287,30 @@ public class CalculatorView {
         dot.addKeyListener(keyListener);
         backspace.addKeyListener(keyListener);
         clear.addKeyListener(keyListener);
+
+        zero.addMouseListener(mouseListener);
+        one.addMouseListener(mouseListener);
+        two.addMouseListener(mouseListener);
+        three.addMouseListener(mouseListener);
+        four.addMouseListener(mouseListener);
+        five.addMouseListener(mouseListener);
+        six.addMouseListener(mouseListener);
+        seven.addMouseListener(mouseListener);
+        eight.addMouseListener(mouseListener);
+        nine.addMouseListener(mouseListener);
+        plus.addMouseListener(mouseListener);
+        minus.addMouseListener(mouseListener);
+        multiplicationSign.addMouseListener(mouseListener);
+        divisionSign.addMouseListener(mouseListener);
+        secondPower.addMouseListener(mouseListener);
+        squareRoot.addMouseListener(mouseListener);
+        equalSign.addMouseListener(mouseListener);
+        dot.addMouseListener(mouseListener);
+        backspace.addMouseListener(mouseListener);
+        clear.addMouseListener(mouseListener);
     }
+
+
 
     public void setOperationLabelText(String text) {
         operationLabel.setText(text);
