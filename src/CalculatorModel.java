@@ -1,4 +1,6 @@
+import java.awt.Color;
 import java.text.DecimalFormat;
+import javax.swing.JButton;
 
 public class CalculatorModel {
 
@@ -219,5 +221,18 @@ public class CalculatorModel {
 
     public String getResultLabelText() {
         return resultLabelText;
+    }
+
+    public void hightlightButton(JButton button, Color color) {
+
+        Color selectButtonColor = new Color(70,70,70);
+
+        button.setBackground(selectButtonColor);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        button.setBackground(color);
     }
 }
