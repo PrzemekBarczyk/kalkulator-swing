@@ -88,6 +88,7 @@ public class CalculatorView {
         setButtonsForegroungs();
         setButtonsBackgroungs();
         setButtonsBorderPainted();
+        setButtonsFocusPainted();
         addButtonsToPanel(keyPanel);
 
         frame.getContentPane().add(resultPanel, BorderLayout.NORTH);
@@ -220,6 +221,30 @@ public class CalculatorView {
         dot.setBorderPainted(false);
         backspace.setBorderPainted(false);
         clear.setBorderPainted(false);
+    }
+
+    private void setButtonsFocusPainted() {
+
+        zero.setFocusPainted(false);
+        one.setFocusPainted(false);
+        two.setFocusPainted(false);
+        three.setFocusPainted(false);
+        four.setFocusPainted(false);
+        five.setFocusPainted(false);
+        six.setFocusPainted(false);
+        seven.setFocusPainted(false);
+        eight.setFocusPainted(false);
+        nine.setFocusPainted(false);
+        plus.setFocusPainted(false);
+        minus.setFocusPainted(false);
+        multiplicationSign.setFocusPainted(false);
+        divisionSign.setFocusPainted(false);
+        secondPower.setFocusPainted(false);
+        squareRoot.setFocusPainted(false);
+        equalSign.setFocusPainted(false);
+        dot.setFocusPainted(false);
+        backspace.setFocusPainted(false);
+        clear.setFocusPainted(false);
     }
 
     private void addButtonsToPanel(JPanel keyPanel) {
