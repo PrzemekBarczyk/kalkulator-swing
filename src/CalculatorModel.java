@@ -168,6 +168,8 @@ public class CalculatorModel {
         operationLabelText = "";
         resultLabelText = "0";
         operationSign = "";
+        choseNumber = false;
+        choseDot = false;
         choseOperationSign = false;
         choseEqualSign = false;
     }
@@ -223,7 +225,7 @@ public class CalculatorModel {
         return resultLabelText;
     }
 
-    public void hightlightButton(JButton button, Color color) {
+    public void hightlighButton(JButton button, Color color) {
 
         Color selectButtonColor = new Color(70,70,70);
 
