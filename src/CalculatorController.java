@@ -67,10 +67,10 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
             theModel.handleOperationsSigns("÷");
         }
         else if (source == theView.getSecondPower()) {
-            theModel.handleOperationsSigns("pow");
+            theModel.handlePowerAndSqrt("sqrt");
         }
         else if (source == theView.getSquareRoot()) {
-            theModel.handleOperationsSigns("sqrt");
+            theModel.handlePowerAndSqrt("√");
         }
 
         else if (source == theView.getEqualSign()) {

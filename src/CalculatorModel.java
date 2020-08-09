@@ -11,9 +11,11 @@ public class CalculatorModel {
     private double firstNumber;
     private double secondNumber;
     private String operationSign;
+    private String buff;
     private boolean choseNumber;
     private boolean choseDot;
     private boolean choseOperationSign; // flaga określająca czy wybrano rodzaj operacji
+    private boolean chosePowOrSqlt;
     private boolean choseEqualSign; // flaga określająca czy zaznaczono =
     private boolean dividedByZero; // flaga określająca czy doszło do dzielenia przez 0
     private DecimalFormat formatForResultLabelText; // do usunięcia powtarzających się zer z przodu i końca oraz dodania odstępów
@@ -32,6 +34,7 @@ public class CalculatorModel {
         choseNumber = false;
         choseDot = false;
         choseOperationSign = false;
+        chosePowOrSqlt = false;
         choseEqualSign = false;
         dividedByZero = false;
 
@@ -93,7 +96,7 @@ public class CalculatorModel {
             return;
         }
 
-        if (choseOperationSign && !choseNumber && !choseEqualSign) { // wybrano kolejny znak pod rząd [2+][2+3-] -> nadpisuje poprzedni znak nowym
+        if (choseOperationSign && !choseNumber && !choseEqualSign && !chosePowOrSqlt) { // wybrano kolejny znak pod rząd [2+][2+3-] -> nadpisuje poprzedni znak nowym
             swapSignNumber(sign);
             operationSign = sign;
             return; // nie trzeba ustawiać flag, bo zostały już ustawione dla poprzedniego znaku
@@ -102,9 +105,14 @@ public class CalculatorModel {
             operationLabelText = "";
         }
 
-        operationLabelText = operationLabelText + formatWithoutSpacing(resultLabelText) + " " + sign + " ";
+        if (chosePowOrSqlt) { // [sqrt(3)]
+            operationLabelText = operationLabelText + " " + sign + " ";
+        }
+        else {
+            operationLabelText = operationLabelText + formatWithoutSpacing(resultLabelText) + " " + sign + " ";
+        }
 
-        if (choseOperationSign && choseNumber && !choseEqualSign) { // wpisano liczbę, wybrano kolejny znak i nie wybrano = [2+3]->wyznacza wynik
+        if (choseOperationSign && (choseNumber || chosePowOrSqlt) && !choseEqualSign) { // wpisano liczbę, wybrano kolejny znak i nie wybrano = [2+3]->wyznacza wynik
             secondNumber = convertResultToDouble(resultLabelText);
             executeOperation();
         }
@@ -116,6 +124,41 @@ public class CalculatorModel {
         choseNumber = false;
         choseDot = false;
         choseOperationSign = true;
+        chosePowOrSqlt = false;
+        choseEqualSign = false;
+    }
+
+    public void handlePowerAndSqrt(String sign) {
+
+        if (!chosePowOrSqlt) { // pierwszy pod rząd wybór tej operacji
+            buff = sign + "(" + formatWithoutSpacing(resultLabelText) + ")";
+            operationLabelText = operationLabelText + buff;
+        }
+        else { // kolejny
+            String reversedBuff = new StringBuilder(buff).reverse().toString();
+            reversedBuff = reversedBuff.replace(")", "\\)");
+            reversedBuff = reversedBuff.replace("(", "\\(");
+            buff = sign + "(" + buff + ")";
+            operationLabelText = new StringBuilder(operationLabelText).reverse().toString().replaceFirst(reversedBuff, ")" + reversedBuff + "(" + new StringBuilder(sign).reverse().toString());
+            operationLabelText = new StringBuilder(operationLabelText).reverse().toString();
+        }
+
+        switch(sign) {
+            case "sqrt":
+                secondPower();
+                break;
+            case "√":
+                squareRoot();
+                break;
+            default:
+                System.out.println("Coś nie gra!");
+        }
+
+        resultLabelText = formatWithSpacing(resultLabelText);
+
+        choseNumber = false;
+        choseDot = false;
+        chosePowOrSqlt = true;
         choseEqualSign = false;
     }
 
@@ -129,11 +172,18 @@ public class CalculatorModel {
             return;
         }
 
-        if (!choseOperationSign) { // wybrano = i nie wybrano żadnego znaku []||[=]||[2]||[2=]
+        if (!choseOperationSign && !chosePowOrSqlt) { // wybrano = i nie wybrano żadnego znaku []||[=]||[2]||[2=]
             operationLabelText = formatWithoutSpacing(resultLabelText) + " = ";
             choseNumber = false;
             choseDot = false;
             choseEqualSign = true;
+            return;
+        }
+        if (!choseOperationSign && chosePowOrSqlt) {
+            operationLabelText = operationLabelText + " = ";
+            choseNumber = false;
+            choseDot = false;
+            chosePowOrSqlt = false;
             return;
         }
 
@@ -142,9 +192,13 @@ public class CalculatorModel {
             firstNumber = convertResultToDouble(resultLabelText);
             operationLabelText = formatWithoutSpacing(resultLabelText) + " " + operationSign + " " + formatWithoutSpacing(convertToString(secondNumber)) + " = ";
         }
-        else if (!choseNumber) { // wybrano znak i nie wybrano liczby [+]||[2+]
+        else if (!choseNumber && !chosePowOrSqlt) { // wybrano znak i nie wybrano liczby [+]||[2+]
             secondNumber = convertResultToDouble(resultLabelText);
             operationLabelText = operationLabelText + formatWithoutSpacing(resultLabelText) + " = ";
+        }
+        else if (chosePowOrSqlt) {
+            secondNumber = convertResultToDouble(resultLabelText);
+            operationLabelText = operationLabelText + " = ";
         }
         else { // wybrano znak i cyfre [2+3]
             secondNumber = convertResultToDouble(resultLabelText);
@@ -174,6 +228,14 @@ public class CalculatorModel {
             case "÷":
                 divide();
                 break;
+            case "pow":
+                secondPower();
+                break;
+            case "sqrt":
+                squareRoot();
+                break;
+            default:
+                System.out.println("Nieznana operacja!");
         }
     }
 
@@ -195,6 +257,7 @@ public class CalculatorModel {
         choseNumber = false;
         choseDot = false;
         choseOperationSign = false;
+        chosePowOrSqlt = false;
         choseEqualSign = false;
     }
 
@@ -246,13 +309,13 @@ public class CalculatorModel {
         }
     }
 
-//    private void secondPower() {
-//        resultLabelText = convertToString(firstNumber * firstNumber);
-//    }
-//
-//    private void squareRoot() {
-//        resultLabelText = convertToString(Math.sqrt(firstNumber));
-//    }
+    private void secondPower() {
+        resultLabelText = convertToString(convertToDouble(resultLabelText) * convertToDouble(resultLabelText));
+    }
+
+    private void squareRoot() {
+        resultLabelText = convertToString(Math.sqrt(convertToDouble(resultLabelText)));
+    }
 
     public String getOperationLabelText() {
         return operationLabelText;
