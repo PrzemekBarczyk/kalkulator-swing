@@ -40,6 +40,10 @@ public class CalculatorView {
     private JButton dot;
     private JButton backspace;
     private JButton clear;
+    private JButton clearEntry;
+    private JButton percent;
+    private JButton fraction;
+    private JButton changeSign;
 
     public CalculatorView() {
 
@@ -80,13 +84,13 @@ public class CalculatorView {
 
         JPanel keyPanel = new JPanel();
         keyPanel.setPreferredSize(new Dimension(WINDOW_WIDTH, 400));
-        keyPanel.setLayout(new GridLayout(5, 4, 3, 3));
+        keyPanel.setLayout(new GridLayout(6, 4, 3, 3));
         keyPanel.setBackground(backgroundColor);
 
         createButtons();
         setButtonsFonts();
-        setButtonsForegroungs();
-        setButtonsBackgroungs();
+        setButtonsForegrounds();
+        setButtonsBackgrounds();
         setButtonsBorderPainted();
         setButtonsFocusPainted();
         addButtonsToPanel(keyPanel);
@@ -108,7 +112,7 @@ public class CalculatorView {
         eight = new JButton("8");
         nine = new JButton("9");
         plus = new JButton("+");
-        minus = new JButton("-");
+        minus = new JButton("−");
         multiplicationSign = new JButton("×");
         divisionSign = new JButton("÷");
         secondPower = new JButton("x²");
@@ -117,9 +121,13 @@ public class CalculatorView {
         dot = new JButton(".");
         backspace = new JButton("⌫");
         clear = new JButton("C");
+        clearEntry = new JButton("CE");
+        percent = new JButton("%");
+        fraction = new JButton("¹⁄ₓ");
+        changeSign = new JButton("⁺⁄₋");
     }
 
-    private void setButtonsForegroungs() {
+    private void setButtonsForegrounds() {
 
         zero.setForeground(Color.white);
         one.setForeground(Color.white);
@@ -141,9 +149,13 @@ public class CalculatorView {
         dot.setForeground(Color.white);
         backspace.setForeground(Color.white);
         clear.setForeground(Color.white);
+        clearEntry.setForeground(Color.white);
+        percent.setForeground(Color.white);
+        fraction.setForeground(Color.white);
+        changeSign.setForeground(Color.white);
     }
 
-    private void setButtonsBackgroungs() {
+    private void setButtonsBackgrounds() {
 
         Color numbersColor = new Color(6,6,6);
         Color operationsColor = new Color(19,19,19);
@@ -168,14 +180,18 @@ public class CalculatorView {
         equalSign.setBackground(equalsColor);
         dot.setBackground(numbersColor);
         backspace.setBackground(operationsColor);
-        clear.setBackground(numbersColor);
+        clear.setBackground(operationsColor);
+        clearEntry.setBackground(operationsColor);
+        percent.setBackground(operationsColor);
+        fraction.setBackground(operationsColor);
+        changeSign.setBackground(numbersColor);
     }
 
     private void setButtonsFonts() {
 
-        Font numbersFont = new Font("Arial", Font.BOLD, 20);
-        Font signFont = new Font("Times New Roman", Font.BOLD, 35);
-        Font remainSignFont = new Font("Times New Roman", Font.ITALIC | Font.BOLD, 21);
+        Font numbersFont = new Font("Arial", Font.BOLD, 18);
+        Font signFont = new Font("Times New Roman", Font.PLAIN, 28);
+        Font remainSignFont = new Font("Times New Roman", Font.ITALIC, 18);
 
         zero.setFont(numbersFont);
         one.setFont(numbersFont);
@@ -193,10 +209,14 @@ public class CalculatorView {
         divisionSign.setFont(signFont);
         secondPower.setFont(remainSignFont);
         squareRoot.setFont(remainSignFont);
-        equalSign.setFont(signFont);
+        equalSign.setFont(new Font("Times New Roman", Font.BOLD, 28));
         dot.setFont(signFont);
-        backspace.setFont(new Font("Default", Font.BOLD, 20));
-        clear.setFont(numbersFont);
+        backspace.setFont(new Font("Default", Font.PLAIN, 15));
+        clear.setFont(new Font("Arial", Font.PLAIN, 15));
+        clearEntry.setFont(new Font("Arial", Font.PLAIN, 15));
+        percent.setFont(new Font("Arial", Font.PLAIN, 18));
+        fraction.setFont(new Font("Times New Roman", Font.ITALIC, 25));
+        changeSign.setFont(new Font("Times New Roman", Font.PLAIN, 22));
     }
 
     private void setButtonsBorderPainted() {
@@ -221,6 +241,10 @@ public class CalculatorView {
         dot.setBorderPainted(false);
         backspace.setBorderPainted(false);
         clear.setBorderPainted(false);
+        clearEntry.setBorderPainted(false);
+        percent.setBorderPainted(false);
+        fraction.setBorderPainted(false);
+        changeSign.setBorderPainted(false);
     }
 
     private void setButtonsFocusPainted() {
@@ -245,11 +269,19 @@ public class CalculatorView {
         dot.setFocusPainted(false);
         backspace.setFocusPainted(false);
         clear.setFocusPainted(false);
+        clearEntry.setFocusPainted(false);
+        percent.setFocusPainted(false);
+        fraction.setFocusPainted(false);
+        changeSign.setFocusPainted(false);
     }
 
     private void addButtonsToPanel(JPanel keyPanel) {
 
+        keyPanel.add(percent);
+        keyPanel.add(clearEntry);
+        keyPanel.add(clear);
         keyPanel.add(backspace);
+        keyPanel.add(fraction);
         keyPanel.add(secondPower);
         keyPanel.add(squareRoot);
         keyPanel.add(divisionSign);
@@ -265,7 +297,7 @@ public class CalculatorView {
         keyPanel.add(two);
         keyPanel.add(three);
         keyPanel.add(plus);
-        keyPanel.add(clear);
+        keyPanel.add(changeSign);
         keyPanel.add(zero);
         keyPanel.add(dot);
         keyPanel.add(equalSign);
@@ -293,6 +325,10 @@ public class CalculatorView {
         dot.addActionListener(actionListener);
         backspace.addActionListener(actionListener);
         clear.addActionListener(actionListener);
+        clearEntry.addActionListener(actionListener);
+        percent.addActionListener(actionListener);
+        fraction.addActionListener(actionListener);
+        changeSign.addActionListener(actionListener);
 
         zero.addKeyListener(keyListener);
         one.addKeyListener(keyListener);
@@ -311,7 +347,7 @@ public class CalculatorView {
         equalSign.addKeyListener(keyListener);
         dot.addKeyListener(keyListener);
         backspace.addKeyListener(keyListener);
-        clear.addKeyListener(keyListener);
+        clearEntry.addKeyListener(keyListener);
 
         zero.addMouseListener(mouseListener);
         one.addMouseListener(mouseListener);
@@ -333,9 +369,11 @@ public class CalculatorView {
         dot.addMouseListener(mouseListener);
         backspace.addMouseListener(mouseListener);
         clear.addMouseListener(mouseListener);
+        clearEntry.addMouseListener(mouseListener);
+        percent.addMouseListener(mouseListener);
+        fraction.addMouseListener(mouseListener);
+        changeSign.addMouseListener(mouseListener);
     }
-
-
 
     public void setOperationLabelText(String text) {
         operationLabel.setText(text);
@@ -423,5 +461,21 @@ public class CalculatorView {
 
     public JButton getClear() {
         return clear;
+    }
+
+    public JButton getClearEntry() {
+        return clearEntry;
+    }
+
+    public JButton getPercent() {
+        return percent;
+    }
+
+    public JButton getFraction() {
+        return fraction;
+    }
+
+    public JButton getChangeSign() {
+        return changeSign;
     }
 }
