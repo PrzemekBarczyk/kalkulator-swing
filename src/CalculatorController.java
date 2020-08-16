@@ -21,69 +21,63 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         Object source = e.getSource();
 
         if (source == theView.getZero()) {
             theModel.handleNumbers("0");
-        }
-        else if (source == theView.getOne()) {
+        } else if (source == theView.getOne()) {
             theModel.handleNumbers("1");
-        }
-        else if (source == theView.getTwo()) {
+        } else if (source == theView.getTwo()) {
             theModel.handleNumbers("2");
-        }
-        else if (source == theView.getThree()) {
+        } else if (source == theView.getThree()) {
             theModel.handleNumbers("3");
-        }
-        else if(source == theView.getFour()) {
+        } else if(source == theView.getFour()) {
             theModel.handleNumbers("4");
-        }
-        else if (source == theView.getFive()) {
+        } else if (source == theView.getFive()) {
             theModel.handleNumbers("5");
-        }
-        else if (source == theView.getSix()) {
+        } else if (source == theView.getSix()) {
             theModel.handleNumbers("6");
-        }
-        else if (source == theView.getSeven()) {
+        } else if (source == theView.getSeven()) {
             theModel.handleNumbers("7");
-        }
-        else if (source == theView.getEight()) {
+        } else if (source == theView.getEight()) {
             theModel.handleNumbers("8");
-        }
-        else if (source == theView.getNine()) {
+        } else if (source == theView.getNine()) {
             theModel.handleNumbers("9");
+        } else if (source == theView.getDot()) {
+            theModel.handleNumbers(".");
         }
 
         else if (source == theView.getPlus()) {
-            theModel.handleOperationsSigns("+");
+            theModel.handleBasicOperations("+");
+        } else if (source == theView.getMinus()) {
+            theModel.handleBasicOperations("-");
+        } else if (source == theView.getMultiplicationSign()) {
+            theModel.handleBasicOperations("×");
+        } else if (source == theView.getDivisionSign()) {
+            theModel.handleBasicOperations("÷");
         }
-        else if (source == theView.getMinus()) {
-            theModel.handleOperationsSigns("-");
-        }
-        else if (source == theView.getMultiplicationSign()) {
-            theModel.handleOperationsSigns("×");
-        }
-        else if (source == theView.getDivisionSign()) {
-            theModel.handleOperationsSigns("÷");
-        }
+
         else if (source == theView.getSecondPower()) {
             theModel.handlePowerAndSqrt("sqrt");
-        }
-        else if (source == theView.getSquareRoot()) {
+        } else if (source == theView.getSquareRoot()) {
             theModel.handlePowerAndSqrt("√");
+        } else if (source == theView.getPercent()) {
+            theModel.handlePercent();
+        } else if (source == theView.getFraction()) {
+            theModel.handleFraction();
         }
 
         else if (source == theView.getEqualSign()) {
             theModel.handleEqualSign();
-        }
-        else if (source == theView.getDot()) {
-            theModel.handleNumbers(".");
-        }
-        else if (source == theView.getBackspace()) {
-            theModel.removeLastNumber();
-        }
-        else if (source == theView.getClear()) {
-            theModel.removeAllNumbers();
+        } else if (source == theView.getBackspace()) {
+            theModel.handleBackspace();
+        } else if (source == theView.getClear()) {
+            theModel.handleClear();
+        } else if (source == theView.getClearEntry()) {
+            theModel.handleClearEntry();
+        } else if (source == theView.getChangeSign()) {
+            theModel.handleSignNegation();
         }
 
         theView.setOperationLabelText(theModel.getOperationLabelText());
@@ -98,6 +92,7 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
 
     @Override
     public void keyReleased(KeyEvent e) {
+
         int key = e.getKeyCode();
         Color numbersColor = new Color(6,6,6);
         Color operationsColor = new Color(19,19,19);
@@ -143,21 +138,25 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
             theModel.handleNumbers("9");
             new Thread(() -> theModel.hightlighButton(theView.getNine(), numbersColor)).start();
         }
+        else if (key == KeyEvent.VK_DECIMAL) {
+            theModel.handleNumbers(".");
+            new Thread(() -> theModel.hightlighButton(theView.getDot(), operationsColor)).start();
+        }
 
         else if (key == KeyEvent.VK_ADD || (e.isShiftDown() && key == KeyEvent.VK_EQUALS)) {
-            theModel.handleOperationsSigns("+");
+            theModel.handleBasicOperations("+");
             new Thread(() -> theModel.hightlighButton(theView.getPlus(), operationsColor)).start();
         }
         else if (key == KeyEvent.VK_MINUS || key == KeyEvent.VK_SUBTRACT) {
-            theModel.handleOperationsSigns("-");
+            theModel.handleBasicOperations("-");
             new Thread(() -> theModel.hightlighButton(theView.getMinus(), operationsColor)).start();
         }
         else if (key == KeyEvent.VK_MULTIPLY || (e.isShiftDown() && key == KeyEvent.VK_8)) {
-            theModel.handleOperationsSigns("×");
+            theModel.handleBasicOperations("×");
             new Thread(() -> theModel.hightlighButton(theView.getMultiplicationSign(), operationsColor)).start();
         }
         else if (key == KeyEvent.VK_DIVIDE) {
-            theModel.handleOperationsSigns("÷");
+            theModel.handleBasicOperations("÷");
             new Thread(() -> theModel.hightlighButton(theView.getDivisionSign(), operationsColor)).start();
         }
 
@@ -165,17 +164,13 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
             theModel.handleEqualSign();
             new Thread(() -> theModel.hightlighButton(theView.getEqualSign(), equalsColor)).start();
         }
-        else if (key == KeyEvent.VK_DECIMAL) {
-            theModel.handleNumbers(".");
-            new Thread(() -> theModel.hightlighButton(theView.getDot(), operationsColor)).start();
-        }
         else if (key == KeyEvent.VK_BACK_SPACE) {
-            theModel.removeLastNumber();
+            theModel.handleBackspace();
             new Thread(() -> theModel.hightlighButton(theView.getBackspace(), operationsColor)).start();
         }
         else if (key == KeyEvent.VK_DELETE) {
-            theModel.removeAllNumbers();
-            new Thread(() -> theModel.hightlighButton(theView.getClear(), operationsColor)).start();
+            theModel.handleClearEntry();
+            new Thread(() -> theModel.hightlighButton(theView.getClearEntry(), operationsColor)).start();
         }
 
         theView.setOperationLabelText(theModel.getOperationLabelText());
@@ -183,86 +178,74 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
+    public void mouseClicked(MouseEvent e) {}
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) {}
 
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
+
         Object source = e.getSource();
         Color selectButtonColor = new Color(70,70,70);
 
         if (source == theView.getZero()) {
             theView.getZero().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getOne()) {
+        } else if (source == theView.getOne()) {
             theView.getOne().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getTwo()) {
+        } else if (source == theView.getTwo()) {
             theView.getTwo().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getThree()) {
+        } else if (source == theView.getThree()) {
             theView.getThree().setBackground(selectButtonColor);
-        }
-        else if(source == theView.getFour()) {
+        } else if(source == theView.getFour()) {
             theView.getFour().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getFive()) {
+        } else if (source == theView.getFive()) {
             theView.getFive().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getSix()) {
+        } else if (source == theView.getSix()) {
             theView.getSix().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getSeven()) {
+        } else if (source == theView.getSeven()) {
             theView.getSeven().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getEight()) {
+        } else if (source == theView.getEight()) {
             theView.getEight().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getNine()) {
+        } else if (source == theView.getNine()) {
             theView.getNine().setBackground(selectButtonColor);
+        } else if (source == theView.getDot()) {
+            theView.getDot().setBackground(selectButtonColor);
         }
 
         else if (source == theView.getPlus()) {
             theView.getPlus().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getMinus()) {
+        } else if (source == theView.getMinus()) {
             theView.getMinus().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getMultiplicationSign()) {
+        } else if (source == theView.getMultiplicationSign()) {
             theView.getMultiplicationSign().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getDivisionSign()) {
+        } else if (source == theView.getDivisionSign()) {
             theView.getDivisionSign().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getSecondPower()) {
+        } else if (source == theView.getSecondPower()) {
             theView.getSecondPower().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getSquareRoot()) {
+        } else if (source == theView.getSquareRoot()) {
             theView.getSquareRoot().setBackground(selectButtonColor);
+        } else if (source == theView.getPercent()) {
+            theView.getPercent().setBackground(selectButtonColor);
+        } else if (source == theView.getFraction()) {
+            theView.getFraction().setBackground(selectButtonColor);
         }
 
         else if (source == theView.getEqualSign()) {
             theView.getEqualSign().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getDot()) {
-            theView.getDot().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getBackspace()) {
+        } else if (source == theView.getBackspace()) {
             theView.getBackspace().setBackground(selectButtonColor);
-        }
-        else if (source == theView.getClear()) {
+        } else if (source == theView.getClear()) {
             theView.getClear().setBackground(selectButtonColor);
+        } else if (source == theView.getClearEntry()) {
+            theView.getClearEntry().setBackground(selectButtonColor);
+        } else if (source == theView.getChangeSign()) {
+            theView.getChangeSign().setBackground(selectButtonColor);
         }
     }
 
@@ -276,65 +259,56 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
 
         if (source == theView.getZero()) {
             theView.getZero().setBackground(numbersColor);
-        }
-        else if (source == theView.getOne()) {
+        } else if (source == theView.getOne()) {
             theView.getOne().setBackground(numbersColor);
-        }
-        else if (source == theView.getTwo()) {
+        } else if (source == theView.getTwo()) {
             theView.getTwo().setBackground(numbersColor);
-        }
-        else if (source == theView.getThree()) {
+        } else if (source == theView.getThree()) {
             theView.getThree().setBackground(numbersColor);
-        }
-        else if(source == theView.getFour()) {
+        } else if(source == theView.getFour()) {
             theView.getFour().setBackground(numbersColor);
-        }
-        else if (source == theView.getFive()) {
+        } else if (source == theView.getFive()) {
             theView.getFive().setBackground(numbersColor);
-        }
-        else if (source == theView.getSix()) {
+        } else if (source == theView.getSix()) {
             theView.getSix().setBackground(numbersColor);
-        }
-        else if (source == theView.getSeven()) {
+        } else if (source == theView.getSeven()) {
             theView.getSeven().setBackground(numbersColor);
-        }
-        else if (source == theView.getEight()) {
+        } else if (source == theView.getEight()) {
             theView.getEight().setBackground(numbersColor);
-        }
-        else if (source == theView.getNine()) {
+        } else if (source == theView.getNine()) {
             theView.getNine().setBackground(numbersColor);
+        } else if (source == theView.getDot()) {
+            theView.getDot().setBackground(numbersColor);
         }
 
         else if (source == theView.getPlus()) {
             theView.getPlus().setBackground(operationsColor);
-        }
-        else if (source == theView.getMinus()) {
+        } else if (source == theView.getMinus()) {
             theView.getMinus().setBackground(operationsColor);
-        }
-        else if (source == theView.getMultiplicationSign()) {
+        } else if (source == theView.getMultiplicationSign()) {
             theView.getMultiplicationSign().setBackground(operationsColor);
-        }
-        else if (source == theView.getDivisionSign()) {
+        } else if (source == theView.getDivisionSign()) {
             theView.getDivisionSign().setBackground(operationsColor);
-        }
-        else if (source == theView.getSecondPower()) {
+        } else if (source == theView.getSecondPower()) {
             theView.getSecondPower().setBackground(operationsColor);
-        }
-        else if (source == theView.getSquareRoot()) {
+        } else if (source == theView.getSquareRoot()) {
             theView.getSquareRoot().setBackground(operationsColor);
+        } else if (source == theView.getPercent()) {
+            theView.getPercent().setBackground(operationsColor);
+        } else if (source == theView.getFraction()) {
+            theView.getFraction().setBackground(operationsColor);
         }
 
         else if (source == theView.getEqualSign()) {
             theView.getEqualSign().setBackground(equalsColor);
-        }
-        else if (source == theView.getDot()) {
-            theView.getDot().setBackground(numbersColor);
-        }
-        else if (source == theView.getBackspace()) {
+        } else if (source == theView.getBackspace()) {
             theView.getBackspace().setBackground(operationsColor);
-        }
-        else if (source == theView.getClear()) {
-            theView.getClear().setBackground(numbersColor);
+        } else if (source == theView.getClear()) {
+            theView.getClear().setBackground(operationsColor);
+        } else if (source == theView.getClearEntry()) {
+            theView.getClearEntry().setBackground(operationsColor);
+        } else if (source == theView.getChangeSign()) {
+            theView.getChangeSign().setBackground(numbersColor);
         }
     }
 }
