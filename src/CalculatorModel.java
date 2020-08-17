@@ -11,17 +11,21 @@ public class CalculatorModel {
     private double firstNumber;
     private double secondNumber;
     private String operationSign;
-    private String buff;
-    private boolean choseNumber;
-    private boolean choseDot;
-    private boolean choseOperationSign; // flaga określająca czy wybrano rodzaj operacji
-    private boolean chosePowOrSqlt;
-    private boolean choseEqualSign; // flaga określająca czy zaznaczono =
-    private boolean dividedByZero; // flaga określająca czy doszło do dzielenia przez 0
+    private String stringBuff;
+
+    private boolean choseNumber; // wpisano liczbę do resultLabelText
+    private boolean choseDot; // użyto we wpisanej liczbie przecinka
+    private boolean choseBasicOperationSign; // czy wybrano jedną z podstawowych operacji
+    private boolean chosePowOrSqlt; // wybrano operację potęgowania lub pierwiastkowania
+    private boolean chosePercent; // wybrano oprarację liczenia procentu
+    private boolean choseFraction; // wybrano operację liczenia ułamka z podanej liczby
+    private boolean choseEqualSign; // zaznaczono =
+    private boolean dividedByZero; // doszło do dzielenia przez 0
+
     private DecimalFormat formatForResultLabelText; // do usunięcia powtarzających się zer z przodu i końca oraz dodania odstępów
     private DecimalFormat formatForOperationLabelText; // do usunięcia powtarzających się zer z przodu i z końca
 
-    private final int MAX_NUMBERS = 13;
+    private final int MAX_NUMBERS = 13; // maksymalna liczba cyfr z które może mieć wpisywana liczba
 
     public CalculatorModel() {
 
@@ -33,8 +37,10 @@ public class CalculatorModel {
 
         choseNumber = false;
         choseDot = false;
-        choseOperationSign = false;
+        choseBasicOperationSign = false;
         chosePowOrSqlt = false;
+        chosePercent = false;
+        choseFraction = false;
         choseEqualSign = false;
         dividedByZero = false;
 
@@ -59,107 +65,178 @@ public class CalculatorModel {
      */
     public void handleNumbers(String number) {
 
-        // przygotowanie
-        if (dividedByZero) { // czyszczenie po dzieleniu przez zero
-            removeAllNumbers();
+        // zabezpieczenia przed różnymi sytuacjami
+        if (!number.equals(".") && dividedByZero) { // czyszczenie po dzieleniu przez zero
+            handleClear();
             dividedByZero = false;
         }
-        else if (choseOperationSign && choseEqualSign && !choseNumber) { // wyświetlono wynik [2+3=]||[2+3-4=]
+        else if (number.equals(".") && dividedByZero) { // zablokowanie operacji po dzieleniu przez zero
+            return;
+        }
+
+        if (choseBasicOperationSign && choseEqualSign && !choseNumber) { // użyto przycisku equalsButton [2+3=]||[2+3-4=]
             resultLabelText = "0";
             operationLabelText = "";
         }
-        else if (!choseNumber) { // wpisywana jest kolejna liczba []||[2+]||[2-3+]||[2=]
+        else if (!choseNumber) { // użyto przycisku z numerem (lub przecinkiem) po raz pierwszy []||[2+]||[2-3+]||[2=]
             resultLabelText = "0";
         }
         else if (resultLabelText.length() > MAX_NUMBERS) { // blokada przed wpisaniem bardzo dużej liczby
             return;
         }
 
-        // działania
-        if (number.equals(".") && !choseDot) { // pierwsze pojawienie się '.' (dopisuje kropke do result)
+        // standardowe operację w wariancie dla przecinka lub cyfr
+        if (number.equals(".") && !choseDot) { // wybrano '.' (po raz pierwszy)
             resultLabelText = resultLabelText + number;
             choseDot = true;
         }
-        else if (!number.equals(".")) { // wszystkie cyfry poza '.' (dopisuje nową cyfrę do result i formatuje)
+        else if (!number.equals(".")) { // wszystkie cyfry poza '.'
             resultLabelText = resultLabelText + number;
             resultLabelText = formatWithSpacing(resultLabelText);
         }
-        choseNumber = true;
+        choseNumber = true; // nie zmienia wartości innych flag poza swoimi
     }
 
     /**
      * Obsługuje zdarzenie wywołane wyborem dowolnego znaku operacji innego niż =.
      */
-    public void handleOperationsSigns(String sign) {
+    public void handleBasicOperations(String sign) {
 
+        // zabezpieczenie przed różnymi sytuacjami
         if (dividedByZero) { // zablokowanie operacji po dzieleniu przez zero
             return;
         }
 
-        if (choseOperationSign && !choseNumber && !choseEqualSign && !chosePowOrSqlt) { // wybrano kolejny znak pod rząd [2+][2+3-] -> nadpisuje poprzedni znak nowym
+        if (choseBasicOperationSign && !choseNumber && !choseEqualSign && !chosePowOrSqlt) { // wybrano kolejny znak pod rząd [2+][2+3-] -> nadpisuje poprzedni znak nowym
             swapSignNumber(sign);
             operationSign = sign;
             return; // nie trzeba ustawiać flag, bo zostały już ustawione dla poprzedniego znaku
         }
-        if (choseEqualSign) { // wybrano = [=]||[2=]||[2+3=] (wymagane by poprawnie zadziałała instrukcja poniżej)
+
+        if (choseEqualSign) { // użyto przycisku equalsButton [=]||[2=]||[2+3=] (wymagane by poprawnie zadziałała instrukcja poniżej)
             operationLabelText = "";
         }
 
-        if (chosePowOrSqlt) { // [sqrt(3)]
+        if (chosePowOrSqlt || chosePercent || choseFraction) { // wybrano którąś z nietypowych operacji [sqrt(2)][2+sqrt(3)]
             operationLabelText = operationLabelText + " " + sign + " ";
         }
-        else {
+        else { // wybrano zwykłą operację
             operationLabelText = operationLabelText + formatWithoutSpacing(resultLabelText) + " " + sign + " ";
         }
 
-        if (choseOperationSign && (choseNumber || chosePowOrSqlt) && !choseEqualSign) { // wpisano liczbę, wybrano kolejny znak i nie wybrano = [2+3]->wyznacza wynik
-            secondNumber = convertResultToDouble(resultLabelText);
-            executeOperation();
+        if (choseBasicOperationSign && (choseNumber || chosePowOrSqlt || chosePercent || choseFraction) && !choseEqualSign) { // wybrano operację kolejny znak bez wyboru = [2+3]->wyznacza wynik
+            secondNumber = deleteSpacesAndConvertToDouble(resultLabelText);
+            executeBasicOperation();
         }
 
-        firstNumber = convertResultToDouble(resultLabelText);
+        firstNumber = deleteSpacesAndConvertToDouble(resultLabelText);
         operationSign = sign;
-        resultLabelText = formatWithSpacing(resultLabelText); // nowa wartość
+        if (!dividedByZero)
+            resultLabelText = formatWithSpacing(resultLabelText); // nowa wartość
 
         choseNumber = false;
         choseDot = false;
-        choseOperationSign = true;
+        choseBasicOperationSign = true;
         chosePowOrSqlt = false;
+        chosePercent = false;
+        choseFraction = false;
         choseEqualSign = false;
     }
 
     public void handlePowerAndSqrt(String sign) {
 
+        if (dividedByZero) { // zablokowanie operacji po dzieleniu przez zero
+            return;
+        }
+
         if (!chosePowOrSqlt) { // pierwszy pod rząd wybór tej operacji
-            buff = sign + "(" + formatWithoutSpacing(resultLabelText) + ")";
-            operationLabelText = operationLabelText + buff;
+            stringBuff = sign + "(" + formatWithoutSpacing(resultLabelText) + ")";
+            operationLabelText = operationLabelText + stringBuff;
         }
         else { // kolejny
-            String reversedBuff = new StringBuilder(buff).reverse().toString();
+            String reversedBuff = new StringBuilder(stringBuff).reverse().toString();
             reversedBuff = reversedBuff.replace(")", "\\)");
             reversedBuff = reversedBuff.replace("(", "\\(");
-            buff = sign + "(" + buff + ")";
+            stringBuff = sign + "(" + stringBuff + ")";
             operationLabelText = new StringBuilder(operationLabelText).reverse().toString().replaceFirst(reversedBuff, ")" + reversedBuff + "(" + new StringBuilder(sign).reverse().toString());
             operationLabelText = new StringBuilder(operationLabelText).reverse().toString();
         }
 
-        switch(sign) {
-            case "sqrt":
-                secondPower();
-                break;
-            case "√":
-                squareRoot();
-                break;
-            default:
-                System.out.println("Coś nie gra!");
-        }
-
-        resultLabelText = formatWithSpacing(resultLabelText);
+        executeExtraOperation(sign);
+        if (!dividedByZero)
+            resultLabelText = formatWithSpacing(resultLabelText);
 
         choseNumber = false;
         choseDot = false;
         chosePowOrSqlt = true;
-        choseEqualSign = false;
+    }
+
+    /**
+     * Obsługuje przycisk liczenia procentu
+     */
+    public void handlePercent() {
+
+        if (dividedByZero) { // zablokowanie operacji po dzieleniu przez zero
+            return;
+        }
+
+        if (!chosePercent) { // pierwszy pod rząd wybór tej operacji
+            executeExtraOperation("%");
+            operationLabelText = operationLabelText + formatWithoutSpacing(resultLabelText);
+        }
+        else { // kolejny
+            String oldResult = formatWithoutSpacing(resultLabelText);
+            executeExtraOperation("%");
+
+            String reversedOldResult = new StringBuilder(oldResult).reverse().toString();
+            operationLabelText = new StringBuilder(operationLabelText).reverse().toString().replaceFirst(reversedOldResult, new StringBuilder(resultLabelText).reverse().toString());
+            operationLabelText = new StringBuilder(operationLabelText).reverse().toString();
+        }
+
+        chosePercent = true;
+    }
+
+    /**
+     * Obsługuje przycisk liczenia ułamka
+     */
+    public void handleFraction() {
+
+        if (dividedByZero) { // zablokowanie operacji po dzieleniu przez zero
+            return;
+        }
+
+        if (!choseFraction) { // pierwszy pod rząd wybór tej operacji
+            stringBuff = "1/( " + formatWithoutSpacing(resultLabelText) + " )";
+            operationLabelText = operationLabelText + stringBuff;
+        }
+        else { // kolejny
+            String reversedBuff = new StringBuilder(stringBuff).reverse().toString();
+            reversedBuff = reversedBuff.replace(")", "\\)");
+            reversedBuff = reversedBuff.replace("(", "\\(");
+            stringBuff = "1/" + "( " + stringBuff + " )";
+            operationLabelText = new StringBuilder(operationLabelText).reverse().toString().replaceFirst(reversedBuff, ") " + reversedBuff + " (" + new StringBuilder("1/").reverse().toString());
+            operationLabelText = new StringBuilder(operationLabelText).reverse().toString();
+        }
+
+        executeExtraOperation("1/");
+        if (!dividedByZero)
+            resultLabelText = formatWithSpacing(resultLabelText);
+
+        choseFraction = true;
+    }
+
+    /**
+     * Obsługuje przycisk zmieniający znak wpisywanej liczby
+     * Zmienia znak liczby przechowywanej w resultLabel
+     */
+    public void handleSignNegation() {
+
+        if (dividedByZero) { // zablokowanie operacji po dzieleniu przez zero
+            return;
+        }
+
+        if (!resultLabelText.equals("0"))
+            resultLabelText = formatWithSpacing(convertToString(-1 * deleteSpacesAndConvertToDouble(resultLabelText)));
     }
 
     /**
@@ -168,44 +245,46 @@ public class CalculatorModel {
     public void handleEqualSign() {
 
         if (dividedByZero) { // zabezpieczenie po dzieleniu przez zero
-            removeAllNumbers();
+            handleClear();
             return;
         }
 
-        if (!choseOperationSign && !chosePowOrSqlt) { // wybrano = i nie wybrano żadnego znaku []||[=]||[2]||[2=]
+        if (!choseBasicOperationSign && !chosePowOrSqlt && !chosePercent && !choseFraction) { // wybrano = i nie wybrano żadnego znaku []||[=]||[2]||[2=]
             operationLabelText = formatWithoutSpacing(resultLabelText) + " = ";
             choseNumber = false;
             choseDot = false;
             choseEqualSign = true;
             return;
         }
-        if (!choseOperationSign && chosePowOrSqlt) {
+        if (!choseBasicOperationSign) { // wybrano = i którąś z operacji nie typowych
             operationLabelText = operationLabelText + " = ";
             choseNumber = false;
             choseDot = false;
             chosePowOrSqlt = false;
+            chosePercent = false;
+            choseFraction = false;
             return;
         }
 
         // choseOperationSign == True zawsze w tym miejscu
         if (choseEqualSign) { // wybrano znak i = [2+=]||[2+3=]
-            firstNumber = convertResultToDouble(resultLabelText);
+            firstNumber = deleteSpacesAndConvertToDouble(resultLabelText);
             operationLabelText = formatWithoutSpacing(resultLabelText) + " " + operationSign + " " + formatWithoutSpacing(convertToString(secondNumber)) + " = ";
         }
-        else if (!choseNumber && !chosePowOrSqlt) { // wybrano znak i nie wybrano liczby [+]||[2+]
-            secondNumber = convertResultToDouble(resultLabelText);
+        else if (!choseNumber && !chosePowOrSqlt && !chosePercent && !choseFraction) { // wybrano znak i nie wybrano liczby [+]||[2+]
+            secondNumber = deleteSpacesAndConvertToDouble(resultLabelText);
             operationLabelText = operationLabelText + formatWithoutSpacing(resultLabelText) + " = ";
         }
-        else if (chosePowOrSqlt) {
-            secondNumber = convertResultToDouble(resultLabelText);
+        else if (chosePowOrSqlt || chosePercent || choseFraction) {
+            secondNumber = deleteSpacesAndConvertToDouble(resultLabelText);
             operationLabelText = operationLabelText + " = ";
         }
         else { // wybrano znak i cyfre [2+3]
-            secondNumber = convertResultToDouble(resultLabelText);
+            secondNumber = deleteSpacesAndConvertToDouble(resultLabelText);
             operationLabelText = operationLabelText + formatWithoutSpacing(convertToString(secondNumber)) + " = ";
         }
 
-        executeOperation();
+        executeBasicOperation();
         if (!dividedByZero)
             resultLabelText = formatWithSpacing(resultLabelText);
 
@@ -214,33 +293,74 @@ public class CalculatorModel {
         choseEqualSign = true;
     }
 
-    public void executeOperation() {
+    /**
+     * Wykonuje odpowiednią operację na podstawie ostatnio użytego znaku
+     */
+    private void executeBasicOperation() {
         switch (operationSign) {
             case "+":
-                add();
+                resultLabelText = convertToString(firstNumber + secondNumber);
                 break;
             case "-":
-                subtract();
+                resultLabelText = convertToString(firstNumber - secondNumber);
                 break;
             case "×":
-                multiply();
+                resultLabelText = convertToString(firstNumber * secondNumber);
                 break;
             case "÷":
-                divide();
-                break;
-            case "pow":
-                secondPower();
-                break;
-            case "sqrt":
-                squareRoot();
+                if (secondNumber != 0) { // zabezpieczenie przed dzieleniem przez 0
+                    resultLabelText = convertToString(firstNumber / secondNumber);
+                }
+                else {
+                    resultLabelText = "Cannot divide by zero";
+                    dividedByZero = true;
+                }
                 break;
             default:
                 System.out.println("Nieznana operacja!");
         }
     }
 
-    public void removeLastNumber() {
-        if (resultLabelText.length() == 1) {
+    /**
+     * Wykonuje odpowiednie operację na podstawie otrzymanego znaku
+     */
+    private void executeExtraOperation(String sign) {
+
+        switch(sign) {
+            case "sqrt":
+                resultLabelText = convertToString(convertToDouble(resultLabelText) * convertToDouble(resultLabelText));
+                break;
+            case "√":
+                resultLabelText = convertToString(Math.sqrt(convertToDouble(resultLabelText)));
+                break;
+            case "1/":
+                if (deleteSpacesAndConvertToDouble(resultLabelText) != 0) { // zabezpieczenie przed dzieleniem przez 0
+                    resultLabelText = convertToString(1 / convertToDouble(resultLabelText));
+                }
+                else {
+                    resultLabelText = "Cannot divide by zero";
+                    dividedByZero = true;
+                }
+                break;
+            case "%":
+                resultLabelText = convertToString(convertToDouble(resultLabelText) / 100 * firstNumber);
+                break;
+            default:
+                System.out.println("Nieznana operacja!");
+        }
+    }
+
+    /**
+     * Usuwa ostatni znak z resultLabelText
+     */
+    public void handleBackspace() {
+
+        if (dividedByZero) { // zabezpieczenie po dzieleniu przez zero
+            handleClear();
+            return;
+        }
+
+        if (resultLabelText.length() == 1) { // ostatnia cyfra
             resultLabelText = "0";
         }
         else {
@@ -248,7 +368,34 @@ public class CalculatorModel {
         }
     }
 
-    public void removeAllNumbers() {
+    /**
+     * Usuwa ostanio wpisaną wartość. W przypadku użycia znaku "=" działa tak samo jak clear()
+     */
+    public void handleClearEntry() {
+
+        if (dividedByZero) { // zabezpieczenie po dzieleniu przez zero
+            handleClear();
+            return;
+        }
+
+        if (!choseEqualSign) {
+            resultLabelText = "0";
+            choseNumber = false;
+            choseDot = false;
+            chosePowOrSqlt = false;
+            chosePercent = false;
+            choseFraction = false;
+        }
+        else {
+            handleClear();
+        }
+    }
+
+    /**
+     * Usuwa wszystkie wprowadzone dane i przywraca je do wartości poczatkowych
+     */
+    public void handleClear() {
+
         firstNumber = 0;
         secondNumber = 0;
         operationLabelText = "";
@@ -256,8 +403,10 @@ public class CalculatorModel {
         operationSign = "";
         choseNumber = false;
         choseDot = false;
-        choseOperationSign = false;
+        choseBasicOperationSign = false;
         chosePowOrSqlt = false;
+        chosePercent = false;
+        choseFraction = false;
         choseEqualSign = false;
     }
 
@@ -267,51 +416,35 @@ public class CalculatorModel {
         }
     }
 
-    public String convertToString(double number) {
+    /**
+     * Konwertuje otrzymanego doubla na Stringa
+     */
+    private String convertToString(double number) {
         return String.valueOf(number);
     }
 
-    public double convertToDouble(String number) {
+    /**
+     * Konwertuje otrzymanego Stringa na doubla
+     */
+    private double convertToDouble(String number) {
         return Double.parseDouble(number);
     }
 
-    private double convertResultToDouble(String number) {
+    /**
+     * Usuwa spację z otrzymanego Stringa i konwertuję go do doubla
+     */
+    private double deleteSpacesAndConvertToDouble(String number) {
         return Double.parseDouble(number.replace(" ", "")); // " " ma nietypowe kodowanie;
     }
 
     private String formatWithSpacing(String number) {
-        return resultLabelText = formatForResultLabelText.format(convertResultToDouble(number));
+        return resultLabelText = formatForResultLabelText.format(deleteSpacesAndConvertToDouble(number));
     }
 
     private String formatWithoutSpacing(String number) {
-        return resultLabelText = formatForOperationLabelText.format(convertResultToDouble(number));
+        return resultLabelText = formatForOperationLabelText.format(deleteSpacesAndConvertToDouble(number));
     }
 
-    private void add() {
-        resultLabelText = convertToString(firstNumber + secondNumber);
-    }
-
-    private void subtract() {
-        resultLabelText = convertToString(firstNumber - secondNumber);
-    }
-
-    private void multiply() {
-        resultLabelText = convertToString(firstNumber * secondNumber);
-    }
-
-    private void divide() {
-        if (secondNumber != 0) { // zabezpieczenie przed dzieleniem przez 0
-            resultLabelText = convertToString(firstNumber / secondNumber);
-        }
-        else {
-            resultLabelText = "Cannot divide by zero";
-            dividedByZero = true;
-        }
-    }
-
-    private void secondPower() {
-        resultLabelText = convertToString(convertToDouble(resultLabelText) * convertToDouble(resultLabelText));
-    }
 
     private void squareRoot() {
         resultLabelText = convertToString(Math.sqrt(convertToDouble(resultLabelText)));
