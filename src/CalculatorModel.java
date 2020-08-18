@@ -27,6 +27,9 @@ public class CalculatorModel {
 
     private final int MAX_NUMBERS = 13; // maksymalna liczba cyfr jakie może mieć wpisywana liczba
 
+    /**
+     * Ustawia zmienne
+     */
     public CalculatorModel() {
 
         previousNumber = 0;
@@ -62,7 +65,16 @@ public class CalculatorModel {
     }
 
     /**
-     * Obsługuje zdarzenie wywołane wyborem dowolnej z cyfr lub przecinka.
+     * Obsługuje zdarzenie wywołane wyborem dowolnej z cyfr lub przecinka
+     *
+     * Zmienia wartość resultLabelText w przypadku podania cyfry lub przecinka. Może również wyczyścić
+     * operationLabelText w przypadku gdy użyto equalsButton.
+     *
+     * Metoda posiada zabezpieczenia przed sytuacjami takimi jak gdy nastąpiło dzielenie przez 0, użycie przycisku
+     * equalsButton, podanie pierwszej cyfry oraz podanie za dużej ilości cyfr.
+     *
+     * Następnie w zależności czy wybrano dowolną z cyfr czy przecinek wykonywane są instrukcję modyfikujące
+     * resultLabelText.
      */
     public void handleNumbers(String number) {
 
@@ -99,7 +111,18 @@ public class CalculatorModel {
     }
 
     /**
-     * Obsługuje zdarzenie wywołane wyborem dowolnego znaku operacji innego niż =.
+     * Obsługuje zdarzenie wywołane wyborem operacji dwuargumentowej
+     *
+     * Zapisuje podaną wartość wraz z wybranym znakiem operacji w operationLabelText. W przypadku wybrania drugiej i
+     * każdej kolejnej operacji bez wybrania equalsButton zapisuje wynik w resultLabelText.
+     *
+     * Metoda posiada zabezpieczenia przed sytuacjami takimi jak gdy nastąpiło dzielenie przez 0, wybór znaku operacji
+     * kilka razy pod rząd, użycie przycisku equalsButton i nie podanie nowej wartości przed wyborem znaku. użycie
+     * nie typowej operacji lub zwykłej.
+     *
+     * Następnie w zależności czy wybrano operację jednoargumentową czy dwuargumentową modyfikowane jest
+     * operationLabelText. Ponadto, jeśli wybrana operacja jest drugą lub kolejną wybraną bez wybrania equalsButton
+     * wyznaczany jest nowy wynik.
      */
     public void handleDyadicOperation(String sign) {
 
@@ -146,6 +169,11 @@ public class CalculatorModel {
         choseEqualSign = false;
     }
 
+    /**
+     * Wykonuje operację dwuargumentową na podstawie ostatnio użytego znaku
+     *
+     * Modyfikuję wartość resultLabelText przy użyciu zmiennych previousNumber i lastNumber.
+     */
     private void executeDyadicOperation() {
         switch (lastOperationSign) {
             case "+":
@@ -171,6 +199,14 @@ public class CalculatorModel {
         }
     }
 
+    /**
+     * Obsługuje zdarzenie wywołane wyborem operacji potęgowania lub pierwiastkowania
+     *
+     * Modyfikuję operationLabelText w różny sposób w zależności od tego czy operacja była wywołana pierwszy czy kolejny
+     * raz pod rząd.
+     *
+     * Metoda posiada zabezpieczenie przed sytuacją gdy nastąpiło dzielenie przez 0.
+     */
     public void handlePowerAndSqrt(String sign) {
 
         if (dividedByZero) { // zablokowanie operacji po dzieleniu przez zero
@@ -202,7 +238,12 @@ public class CalculatorModel {
     }
 
     /**
-     * Obsługuje przycisk liczenia procentu
+     * Obsługuje zdarzenie wywołane wyborem operacji wyznaczania procentu
+     *
+     * Modyfikuję operationLabelText w różny sposób w zależności od tego czy operacja była wywołana pierwszy czy kolejny
+     * raz pod rząd.
+     *
+     * Metoda posiada zabezpieczenie przed sytuacją gdy nastąpiło dzielenie przez 0.
      */
     public void handlePercent() {
 
@@ -232,7 +273,12 @@ public class CalculatorModel {
     }
 
     /**
-     * Obsługuje przycisk liczenia ułamka
+     * Obsługuje zdarzenie wywołane wyborem operacji wyznaczania ułamka
+     *
+     * Modyfikuję operationLabelText w różny sposób w zależności od tego czy operacja była wywołana pierwszy czy kolejny
+     * raz pod rząd.
+     *
+     * Metoda posiada zabezpieczenie przed sytuacją gdy nastąpiło dzielenie przez 0.
      */
     public void handleFraction() {
 
@@ -265,8 +311,9 @@ public class CalculatorModel {
     }
 
     /**
-     * Obsługuje przycisk zmieniający znak wpisywanej liczby
-     * Zmienia znak liczby przechowywanej w resultLabel
+     * Wykonuje operację jednoargumentową na podstawie otrzymanego znaku
+     *
+     * Modyfikuję wartość resultLabelText przy użyciu odpowiedniego działania na resultLabelText.
      */
     private void executeUnaryOperation(String sign) {
 
@@ -295,7 +342,18 @@ public class CalculatorModel {
     }
 
     /**
-     * Obsługuje zdarzenie wywołane wyborem znaku =.
+     * Obsługuje zdarzenie wywołane wyborem znaku =
+     *
+     * Modyfikuje operationLabelText oraz wyznacza nową wartość resultLabelText przy użyciu wartości zmiennych
+     * previousNumber i lastNumber.
+     *
+     * Metoda posiada zabezpieczenie przed sytuacją gdy nastąpiło dzielenie przez 0.
+     *
+     * Następnie podejmowane są kroki w przypadku gdy metoda została wywołana bez wyboru operacji dwuargumentowej.
+     * Polegają one na modyfikacji operationLabelText i zakończeniu wykonywania metody ponieważ resultLabelText nie
+     * może być w takiej sytuacji modyfikowany. W przypadku gdy metoda została wywołana z wybraną operacją
+     * dwuargumentową modyfikowany jest operationLabelText, wykonywana jest wybrana operacja oraz wyświetlana jest
+     * nowa wartość resultLabelText.
      */
     public void handleEqualSign() {
 
@@ -358,6 +416,10 @@ public class CalculatorModel {
 
     /**
      * Usuwa ostatni znak z resultLabelText
+     *
+     * Posiada trzy możliwe przebiegi w zależności czy ostatni znak to przecinek, cyfra oraz ostatnia cyfra.
+     *
+     * Metoda posiada zabezpieczenie przed sytuacją gdy nastąpiło dzielenie przez 0.
      */
     public void handleBackspace() {
 
@@ -379,7 +441,11 @@ public class CalculatorModel {
     }
 
     /**
-     * Usuwa ostanio wpisaną wartość. W przypadku użycia znaku "=" działa tak samo jak clear()
+     * Usuwa zawartość resultLabelText
+     *
+     * W przypadku użycia znaku "=" działa tak samo jak clear().
+     *
+     * Metoda posiada zabezpieczenie przed sytuacją gdy nastąpiło dzielenie przez 0.
      */
     public void handleClearEntry() {
 
@@ -402,7 +468,7 @@ public class CalculatorModel {
     }
 
     /**
-     * Usuwa wszystkie wprowadzone dane i przywraca je do wartości poczatkowych
+     * Usuwa wszystkie wprowadzone dane i przywraca je do wartości początkowych
      */
     public void handleClear() {
 
@@ -420,6 +486,27 @@ public class CalculatorModel {
         choseEqualSign = false;
     }
 
+    /**
+     * Obsługuje zdarzenie wywołane wyborem przycisku zmiany znaku
+     *
+     * Zmienia znak liczby przechowywanej w resultLabel na przeciwny mnożąc jej wartość przez -1.
+     *
+     * Metoda posiada zabezpieczenie przed sytuacją gdy nastąpiło dzielenie przez 0.
+     */
+    public void handleSignNegation() {
+
+        if (dividedByZero) { // zablokowanie operacji po dzieleniu przez zero
+            return;
+        }
+
+        if (!resultLabelText.equals("0"))
+            resultLabelText = formatWithSpacing(convertToString(-1 * deleteSpacesAndConvertToDouble(resultLabelText)));
+    }
+
+
+    /**
+     * Usuwa ostatni znak z operationLabelText i zamienia go na otrzymany w argumencie
+     */
     private void swapSignNumber(String sign) {
         if (operationLabelText.length() > 0) {
             operationLabelText = operationLabelText.substring(0, operationLabelText.length()-2) + sign + " ";
@@ -427,14 +514,14 @@ public class CalculatorModel {
     }
 
     /**
-     * Konwertuje otrzymanego doubla na Stringa
+     * Konwertuje otrzymanego doubla do Stringa
      */
     private String convertToString(double number) {
         return String.valueOf(number);
     }
 
     /**
-     * Konwertuje otrzymanego Stringa na doubla
+     * Konwertuje otrzymanego Stringa do doubla
      */
     private double convertToDouble(String number) {
         return Double.parseDouble(number);
@@ -447,22 +534,41 @@ public class CalculatorModel {
         return Double.parseDouble(number.replace(" ", "")); // " " ma nietypowe kodowanie;
     }
 
+    /**
+     * Formatuje otrzymanego Stringa dodając spację co 3 cyfry
+     *
+     * Używa w tym celu klasy DecimalFormat
+     */
     private String formatWithSpacing(String number) {
         return resultLabelText = formatForResultLabelText.format(deleteSpacesAndConvertToDouble(number));
     }
 
+    /**
+     * Formatuje otrzymanego Stringa bez dodawania spacji
+     *
+     * Używa w tym celu klasy DecimalFormat
+     */
     private String formatWithoutSpacing(String number) {
         return resultLabelText = formatForOperationLabelText.format(deleteSpacesAndConvertToDouble(number));
     }
-    
+
+    /**
+     * Zwraca zawartość zmiennej operationLabelText
+     */
     public String getOperationLabelText() {
         return operationLabelText;
     }
 
+    /**
+     * Zwraca zawartość zmiennej resultLabelText
+     */
     public String getResultLabelText() {
         return resultLabelText;
     }
 
+    /**
+     * Zmienia na chwilę kolor tła przesłanego przycisku
+     */
     public void highlightButton(JButton button, Color color) {
 
         Color selectButtonColor = new Color(70,70,70);
