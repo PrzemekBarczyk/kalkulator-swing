@@ -19,6 +19,9 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
         theView.addListeners(this, this, this);
     }
 
+    /**
+     * Po naciśnięciu lewym przyciskiem myszy na komponencie przycisku wywołuję odpowiadającą mu metodę
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -90,6 +93,9 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
     @Override
     public void keyPressed(KeyEvent e) {}
 
+    /**
+     * Po naciśnięciu klawisza na klawiaturze odpowiadającego komponentowi przycisku zmienia kolor jego tła na moment
+     */
     @Override
     public void keyReleased(KeyEvent e) {
 
@@ -186,8 +192,9 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
     @Override
     public void mouseReleased(MouseEvent e) {}
 
-    }
-
+    /**
+     * Po najechaniu kursorem na komponent przycisku zmienia kolor jego tła na jaśniejszy
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
 
@@ -249,6 +256,9 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
         }
     }
 
+    /**
+     * Po opuszczeniu kursorem komponentu przysiku zmienia kolor jego tła na początkowy
+     */
     @Override
     public void mouseExited(MouseEvent e) {
 
