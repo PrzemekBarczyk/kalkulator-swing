@@ -45,6 +45,9 @@ public class CalculatorView {
     private JButton fractionButton;
     private JButton signNegationButton;
 
+    /**
+     * Ustawia Ramkę i wywołuję metodę która dodaje do niej komponenty
+     */
     public CalculatorView() {
 
         frame = new JFrame();
@@ -60,6 +63,9 @@ public class CalculatorView {
         frame.setVisible(true);
     }
 
+    /**
+     * Dodaje komponenty do głównego Panelu
+     */
     private void addComponentsToPane() {
 
         Color backgroundColor = new Color(31,31,31);
@@ -99,6 +105,9 @@ public class CalculatorView {
         frame.getContentPane().add(keyPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Tworzy obiekty przycisków
+     */
     private void createButtons() {
 
         zeroButton = new JButton("0");
@@ -127,6 +136,9 @@ public class CalculatorView {
         signNegationButton = new JButton("⁺⁄₋");
     }
 
+    /**
+     * Zmienia kolor czcionek na przyciskach
+     */
     private void setButtonsForegrounds() {
 
         zeroButton.setForeground(Color.white);
@@ -155,6 +167,9 @@ public class CalculatorView {
         signNegationButton.setForeground(Color.white);
     }
 
+    /**
+     * Ustawia odpowiednie tła przyciskom
+     */
     private void setButtonsBackgrounds() {
 
         Color numbersColor = new Color(6,6,6);
@@ -187,6 +202,9 @@ public class CalculatorView {
         signNegationButton.setBackground(numbersColor);
     }
 
+    /**
+     * Ustawia odpowiednie czcionki przyciskom
+     */
     private void setButtonsFonts() {
 
         Font numbersFont = new Font("Arial", Font.BOLD, 18);
@@ -219,6 +237,9 @@ public class CalculatorView {
         signNegationButton.setFont(new Font("Times New Roman", Font.PLAIN, 22));
     }
 
+    /**
+     * Wyłącza rysowanie ramek wokół przycisków
+     */
     private void setButtonsBorderPainted() {
 
         zeroButton.setBorderPainted(false);
@@ -247,6 +268,9 @@ public class CalculatorView {
         signNegationButton.setBorderPainted(false);
     }
 
+    /**
+     * Wyłącza zaznaczenie przycisków po otrzymaniu focusa
+     */
     private void setButtonsFocusPainted() {
 
         zeroButton.setFocusPainted(false);
@@ -275,6 +299,9 @@ public class CalculatorView {
         signNegationButton.setFocusPainted(false);
     }
 
+    /**
+     * Dodaje komponenty przycisków do otrzymanego Panelu
+     */
     private void addButtonsToPanel(JPanel keyPanel) {
 
         keyPanel.add(percentButton);
@@ -303,6 +330,9 @@ public class CalculatorView {
         keyPanel.add(equalsButton);
     }
 
+    /**
+     * Dodaje listenery na komponenty przycisków
+     */
     public void addListeners(ActionListener actionListener, KeyListener keyListener, MouseListener mouseListener) {
 
         zeroButton.addActionListener(actionListener);
