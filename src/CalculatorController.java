@@ -52,13 +52,13 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
         }
 
         else if (source == theView.getPlus()) {
-            theModel.handleBasicOperations("+");
+            theModel.handleDyadicOperation("+");
         } else if (source == theView.getMinus()) {
-            theModel.handleBasicOperations("-");
+            theModel.handleDyadicOperation("-");
         } else if (source == theView.getMultiplicationSign()) {
-            theModel.handleBasicOperations("×");
+            theModel.handleDyadicOperation("×");
         } else if (source == theView.getDivisionSign()) {
-            theModel.handleBasicOperations("÷");
+            theModel.handleDyadicOperation("÷");
         }
 
         else if (source == theView.getSecondPower()) {
@@ -106,77 +106,77 @@ public class CalculatorController implements ActionListener, KeyListener, MouseL
 
         if (key == KeyEvent.VK_0 || key == KeyEvent.VK_NUMPAD0) {
             theModel.handleNumbers("0");
-            new Thread(() -> theModel.hightlighButton(theView.getZero(), numbersColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getZero(), numbersColor)).start();
         }
         else if (key == KeyEvent.VK_1 || key == KeyEvent.VK_NUMPAD1) {
             theModel.handleNumbers("1");
-            new Thread(() -> theModel.hightlighButton(theView.getOne(), numbersColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getOne(), numbersColor)).start();
         }
         else if (key == KeyEvent.VK_2 || key == KeyEvent.VK_NUMPAD2) {
             theModel.handleNumbers("2");
-            new Thread(() -> theModel.hightlighButton(theView.getTwo(), numbersColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getTwo(), numbersColor)).start();
         }
         else if (key == KeyEvent.VK_3 || key == KeyEvent.VK_NUMPAD3) {
             theModel.handleNumbers("3");
-            new Thread(() -> theModel.hightlighButton(theView.getThree(), numbersColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getThree(), numbersColor)).start();
         }
         else if(key == KeyEvent.VK_4 || key == KeyEvent.VK_NUMPAD4) {
             theModel.handleNumbers("4");
-            new Thread(() -> theModel.hightlighButton(theView.getFour(), numbersColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getFour(), numbersColor)).start();
         }
         else if (key == KeyEvent.VK_5 || key == KeyEvent.VK_NUMPAD5) {
             theModel.handleNumbers("5");
-            new Thread(() -> theModel.hightlighButton(theView.getFive(), numbersColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getFive(), numbersColor)).start();
         }
         else if (key == KeyEvent.VK_6 || key == KeyEvent.VK_NUMPAD6) {
             theModel.handleNumbers("6");
-            new Thread(() -> theModel.hightlighButton(theView.getSix(), numbersColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getSix(), numbersColor)).start();
         }
         else if (key == KeyEvent.VK_7 || key == KeyEvent.VK_NUMPAD7) {
             theModel.handleNumbers("7");
-            new Thread(() -> theModel.hightlighButton(theView.getSeven(), numbersColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getSeven(), numbersColor)).start();
         }
         else if ((key == KeyEvent.VK_8 && !e.isShiftDown()) || key == KeyEvent.VK_NUMPAD8) {
             theModel.handleNumbers("8");
-            new Thread(() -> theModel.hightlighButton(theView.getEight(), numbersColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getEight(), numbersColor)).start();
         }
         else if (key == KeyEvent.VK_9 || key == KeyEvent.VK_NUMPAD9) {
             theModel.handleNumbers("9");
-            new Thread(() -> theModel.hightlighButton(theView.getNine(), numbersColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getNine(), numbersColor)).start();
         }
         else if (key == KeyEvent.VK_DECIMAL) {
             theModel.handleNumbers(".");
-            new Thread(() -> theModel.hightlighButton(theView.getDot(), operationsColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getDot(), operationsColor)).start();
         }
 
         else if (key == KeyEvent.VK_ADD || (e.isShiftDown() && key == KeyEvent.VK_EQUALS)) {
-            theModel.handleBasicOperations("+");
-            new Thread(() -> theModel.hightlighButton(theView.getPlus(), operationsColor)).start();
+            theModel.handleDyadicOperation("+");
+            new Thread(() -> theModel.highlightButton(theView.getPlus(), operationsColor)).start();
         }
         else if (key == KeyEvent.VK_MINUS || key == KeyEvent.VK_SUBTRACT) {
-            theModel.handleBasicOperations("-");
-            new Thread(() -> theModel.hightlighButton(theView.getMinus(), operationsColor)).start();
+            theModel.handleDyadicOperation("-");
+            new Thread(() -> theModel.highlightButton(theView.getMinus(), operationsColor)).start();
         }
         else if (key == KeyEvent.VK_MULTIPLY || (e.isShiftDown() && key == KeyEvent.VK_8)) {
-            theModel.handleBasicOperations("×");
-            new Thread(() -> theModel.hightlighButton(theView.getMultiplicationSign(), operationsColor)).start();
+            theModel.handleDyadicOperation("×");
+            new Thread(() -> theModel.highlightButton(theView.getMultiplicationSign(), operationsColor)).start();
         }
         else if (key == KeyEvent.VK_DIVIDE) {
-            theModel.handleBasicOperations("÷");
-            new Thread(() -> theModel.hightlighButton(theView.getDivisionSign(), operationsColor)).start();
+            theModel.handleDyadicOperation("÷");
+            new Thread(() -> theModel.highlightButton(theView.getDivisionSign(), operationsColor)).start();
         }
 
         else if ((key == KeyEvent.VK_EQUALS && !e.isShiftDown()) || key == KeyEvent.VK_ENTER) {
             theModel.handleEqualSign();
-            new Thread(() -> theModel.hightlighButton(theView.getEqualSign(), equalsColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getEqualSign(), equalsColor)).start();
         }
         else if (key == KeyEvent.VK_BACK_SPACE) {
             theModel.handleBackspace();
-            new Thread(() -> theModel.hightlighButton(theView.getBackspace(), operationsColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getBackspace(), operationsColor)).start();
         }
         else if (key == KeyEvent.VK_DELETE) {
             theModel.handleClearEntry();
-            new Thread(() -> theModel.hightlighButton(theView.getClearEntry(), operationsColor)).start();
+            new Thread(() -> theModel.highlightButton(theView.getClearEntry(), operationsColor)).start();
         }
 
         theView.setOperationLabelText(theModel.getOperationLabelText());
